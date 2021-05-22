@@ -1,0 +1,27 @@
+pipeline {
+        agent {
+        	label {
+            		label ""
+            		customWorkspace "/var/lib/jenkins/workspace/cicdproject"
+        	}
+    	}
+        tools {
+                terraform 'Terraform'
+        }
+
+        environment {
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        }
+
+        stages {
+
+                stage('Terraform destroy'){
+                        steps {
+                                sh label: '', script: 'terraform destroy --auto-approve'
+                        }
+                }
+
+        }
+
+}
