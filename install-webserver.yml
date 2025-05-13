@@ -16,7 +16,7 @@
         delay: 10
         timeout: 600
     - name: Install Webserver
-      yum: pkg=httpd state=latest
+      apt: pkg=httpd state=latest
     - name: Place the index file to web root
       copy: src=files/index.html dest={{ web_root }}/index.html owner=apache group=apache mode=0644
     - name: Enable web service
