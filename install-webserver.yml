@@ -8,6 +8,7 @@
   tasks:
     - pause:
         minutes: 3 
+
     - name: Wait for the reboot and reconnect
       wait_for:
         port: 22
@@ -15,13 +16,35 @@
         search_regex: OpenSSH
         delay: 10
         timeout: 600
+
     - name: Install Webserver
-      apt: pkg=apache2 state=latest
+      apt:
+        pkg: apache2
+        state: latest
+        update_cache: yes
+
+    - name: Fix missing packages if any
+      command: "sudo apt-get install apache2 --fix-missing"
+      become: true
+      retries: 3
+      delay: 10
+
     - name: Place the index file to web root
-      copy: src=files/index.html dest={{ web_root }}/index.html owner=apache group=apache mode=0644
+      copy:
+        src: files/index.html
+        dest: "{{ web_root }}/index.html"
+        owner: apache
+        group: apache
+        mode: '0644'
+
     - name: Enable web service
-      service: name=apache2 enabled=yes
+      service:
+        name: apache2
+        enabled: yes
       notify: restart web server
+
   handlers:
     - name: restart web server
-      service: name=apache2 state=restarted
+      service:
+        name: apache2
+        state: restarted
