@@ -17,7 +17,7 @@ pipeline {
         stages {
                 stage('Git checkout'){
                         steps {
-                                git branch: 'main', credentialsId: 'github', url: 'https://github.com/sarveshrasam/tfansicicd.git'
+                                git branch: 'main', credentialsId: 'github', url: 'https://github.com/yuvrajm-14/cicddemo.git'
                         }
                 }
 
