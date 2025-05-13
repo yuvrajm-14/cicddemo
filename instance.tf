@@ -29,7 +29,7 @@ resource "aws_security_group" "terraform-ansible" {
 resource "aws_instance" "terraform-ansible" {
   ami           = "ami-096fda3c22c1c990a"
   instance_type = "t2.micro"
-  key_name      = "KP_MARCH_2021"
+  key_name      = "key_server_ec2"
   security_groups = ["${aws_security_group.terraform-ansible.name}"]
 
   tags = {
