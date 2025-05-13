@@ -12,36 +12,37 @@
     - name: Wait for the reboot and reconnect
       wait_for:
         port: 22
-        host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        host: '{{ (ansible_ssh_host | default(ansible_host)) | default(inventory_hostname) }}'
         search_regex: OpenSSH
         delay: 10
         timeout: 600
 
-    - name: Install Webserver
+    - name: Install Apache2 Webserver
       apt:
         pkg: apache2
         state: latest
         update_cache: yes
 
     - name: Fix missing packages if any
-      command: "sudo apt-get install apache2 --fix-missing"
-      become: true
+      command: apt-get install apache2 --fix-missing
+      register: fix_result
       retries: 3
       delay: 10
+      until: fix_result.rc == 0
 
     - name: Place the index file to web root
       copy:
         src: files/index.html
         dest: "{{ web_root }}/index.html"
-        owner: apache
-        group: apache
+        owner: www-data
+        group: www-data
         mode: '0644'
 
-    - name: Enable web service
+    - name: Enable Apache2 service
       service:
         name: apache2
         enabled: yes
-      notify: restart web server
+        state: started
 
   handlers:
     - name: restart web server
