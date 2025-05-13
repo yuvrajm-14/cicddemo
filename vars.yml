@@ -1,2 +1,2 @@
-ssh_key_path: ~/.ssh/id_rsa
+ssh_key_path: ~/.ssh/id_ed25519
 web_root: /var/www/html
